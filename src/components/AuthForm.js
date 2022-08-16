@@ -1,7 +1,15 @@
 import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useLoginMutation, useRegisterMutation } from '../store/api/authApi';
+import { storeAuth } from '../store/reducer/authSlice';
 
 const AuthForm = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
+    // const redirectURL = location.preLocation.pathname
+
     const [isLoginForm, setIsLoginForm] = useState(true);
 
     const usernameInp = useRef();
@@ -10,6 +18,8 @@ const AuthForm = () => {
 
     const [registe, { error: regError }] = useRegisterMutation()
     const [login, { error: loginErr }] = useLoginMutation()
+
+
     const submitHandler = (e) => {
         e.preventDefault();
 
@@ -23,7 +33,16 @@ const AuthForm = () => {
                 identifier: username,
                 password
             }).then(res => {
-                console.log(res);
+                dispatch(storeAuth(
+                    {
+                        token: res.data.jwt,
+                        user: res.data.user
+                    }
+                ));
+                // 登录成功后，需要向系统中添加一个标识，标记用户的登录状态
+                // 登录状态（布尔值，token(jwt)，用户信息）
+                // 跳转页面到根目录
+                navigate(`${location.state.preLocation.pathname}`, { replace: true });
             }).catch(error => {
                 console.log(error)
             })
@@ -39,7 +58,6 @@ const AuthForm = () => {
                 }
             })
         }
-
     };
 
     return (
