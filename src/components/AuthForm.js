@@ -42,7 +42,7 @@ const AuthForm = () => {
                 // 登录成功后，需要向系统中添加一个标识，标记用户的登录状态
                 // 登录状态（布尔值，token(jwt)，用户信息）
                 // 跳转页面到根目录
-                navigate(`${location.state.preLocation.pathname}`, { replace: true });
+                navigate(`${location.state?.preLocation?.pathname || '/'}`, { replace: true });
             }).catch(error => {
                 console.log(error)
             })

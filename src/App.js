@@ -5,9 +5,11 @@ import ProfilePage from "./pages/ProfilePage";
 import Layout from "./components/Layout";
 import AuthPage from './pages/AuthPage'
 import NeedAuth from './components/NeedAuth';
+import { useAutoLogout } from './hooks/useAutoLogout';
 
 
 const App = () => {
+    useAutoLogout()
     return (
         <Layout>
             <Routes>
